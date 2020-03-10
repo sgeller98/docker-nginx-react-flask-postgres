@@ -1,0 +1,66 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    volumes: 
+      - ./docker-local/datadir:/var/lib/postgresql/data
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: reaskt
+      POSTGRES_USER: dhruv
+      POSTGRES_DB: reask_app
+    networks:
+        - reask_net
+
+  api:
+    image: python:3.7-slim
+    container_name: api
+    restart: always
+    volumes: 
+      - ./reask-be:/backend
+    entrypoint: "/backend/api.sh"
+    depends_on: 
+      - db
+    networks: 
+      - reask_net
+
+  webserver:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes: 
+      - ./docker-local/nginx/fb.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx_logs:/logs
+      - ./reask-be:/backend
+    networks:
+      - reask_net
+    links: 
+      - api
+    depends_on: 
+      - nodeapp
+      - api
+
+
+  nodeapp:
+    image: node:13
+    restart: always
+    container_name: nodeapp
+    # working_dir: /app
+    environment:
+      - NODE_ENV=dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./reask-fe:/app
+    entrypoint: "/app/fe.sh"
+    networks:
+      - reask_net
+
+networks:
+  reask_net:
+    driver: bridge

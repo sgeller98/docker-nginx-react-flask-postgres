@@ -1,0 +1,14 @@
+pidfile = 'api_point.pid'
+# worker_tmp_dir = '/backend'
+worker_class = 'gthread'
+workers = 1
+worker_connections = 2
+timeout = 30
+keepalive = 2
+threads = 4
+proc_name = 'api_point'
+bind = '0.0.0.0:3009'
+forwarded_allow_ips ='*'
+backlog = 2048
+accesslog = '/backend/logs/access.log'
+errorlog = '/backend/logs/error.log'
