@@ -11,8 +11,8 @@ services:
     ports:
       - "5432:5432"
     environment:
+      POSTGRES_USER: db_user
       POSTGRES_PASSWORD: reaskt
-      POSTGRES_USER: dhruv
       POSTGRES_DB: reask_app
     networks:
         - reask_net
