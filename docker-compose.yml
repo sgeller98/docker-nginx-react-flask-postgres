@@ -42,14 +42,14 @@ services:
     links: 
       - api
     depends_on: 
-      - nodeapp
+      - frontend
       - api
 
 
-  nodeapp:
+  frontend:
     image: node:13
     restart: always
-    container_name: nodeapp
+    container_name: frontend
     environment:
       - NODE_ENV=dev
     ports:
